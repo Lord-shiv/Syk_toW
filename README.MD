@@ -1,8 +1,8 @@
 <h1>Django Blog App</h1>
 
-welcome to the Syk_Tow repo this app is created for the purpose of sharing knowledge through people, we will guide you how to get started with our applications.
+welcome to the Syk_Tow repo this website is created for the purpose of sharing knowledge through people.
 
-we have requirements to check ✔ make sure these are installed in your venv ▶
+Requirements to add ✔ in venv ▶
 
 <li>django==3.2</li>
 <li>psycopg2==2.9.1</li>
@@ -15,4 +15,4 @@ we have requirements to check ✔ make sure these are installed in your venv ▶
 <br>
 <h2>Custom Auth</h2>
 
-We are using Email as login field for our users, You need a email or username (required) for registration. Admin is custom as per one's need. All though users are not able to access it.
+We are using Email as login field for our users, You need a email and username (required) for registration. Admin is custom as per one's need.
