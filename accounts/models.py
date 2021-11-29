@@ -4,7 +4,8 @@ from django.contrib.auth.models import (
 )
 from django.contrib.auth.models import PermissionsMixin
 from django_resized import ResizedImageField
-
+from phonenumber_field.modelfields import PhoneNumberField
+from django.core.validators import RegexValidator
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -43,11 +44,11 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
-
+alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(
-        max_length=255, null=True, blank=True, unique=True)
+        max_length=255, null=True, blank=True, unique=True, validators=[alphanumeric])
     is_active = models.BooleanField(default=False)  # can login
     is_staff = models.BooleanField(default=False)  # staff user non superuser
     is_admin = models.BooleanField(default=False)  # superuser
@@ -55,10 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name='date joined', auto_now_add=True, null=True, blank=True)
     last_login = models.DateTimeField(
         verbose_name='last login', auto_now=True, null=True, blank=True)
-    profile_image = ResizedImageField(
-        upload_to='images/profile_pics/', default='images/profile_pics/default_icon.png', quality=70, crop=['middle', 'center'], size=[320, 320], blank=True, null=True)
-    bio = models.TextField(max_length=500, blank=True)
-    hide_email = models.BooleanField(default=True)
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -91,3 +89,35 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def _is_active(self):
         return self.is_active
+
+
+
+
+class Profile(models.Model):
+    GENDER = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+    )
+    avatar = ResizedImageField(
+        upload_to='images/profile_pics/', default='images/profile_pics/default_icon.jpg', quality=70, crop=['middle', 'center'], size=[320, 320], blank=True, null=True)
+    following = models.ManyToManyField(
+        'self', related_name='followers', blank=True, symmetrical=False)
+    first_name = models.CharField(max_length=150, null=True, blank=True)
+    last_name = models.CharField(max_length=150, null=True, blank=True)
+    gender = models.CharField(
+        max_length=6, choices=GENDER, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_of_birth = models.DateField(null=True, blank=True)
+    phonenumber = PhoneNumberField(blank=True, null=True)
+    location = models.CharField(max_length=150, null=True, blank=True)
+    language = models.CharField(max_length=150, null=True, blank=True)
+    country = models.CharField(max_length=150, null=True, blank=True)
+    address = models.CharField(max_length=256, null=True, blank=True)
+    website = models.URLField(null=True, blank=True)
+    pincode = models.IntegerField(null=True, blank=True)
+    bio = models.TextField(max_length=500, blank=True)
+    is_private_account = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username}'

@@ -1,8 +1,8 @@
-<h1>Django Blog App</h1>
+<h1>Blog App</h1>
 
 welcome to the Syk_Tow repo this app is created for the purpose of sharing knowledge through people, we will guide you how to get started with our applications.
 
-we have requirements to check ✔ make sure these are installed in your venv ▶
+we have requirements to check ✔ make sure these are installed in your venv ~>
 
 <li>django==3.2</li>
 <li>psycopg2==2.9.1</li>
